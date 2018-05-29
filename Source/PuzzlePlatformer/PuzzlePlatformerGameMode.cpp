@@ -1,0 +1,17 @@
+// Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
+
+#include "PuzzlePlatformerGameMode.h"
+#include "PuzzlePlatformerCharacter.h"
+#include "UObject/ConstructorHelpers.h"
+
+APuzzlePlatformerGameMode::APuzzlePlatformerGameMode()
+{
+	// set default pawn class to our Blueprinted character
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPersonCPP/Blueprints/ThirdPersonCharacter"));
+	if (PlayerPawnBPClass.Class != NULL)
+	{
+		DefaultPawnClass = PlayerPawnBPClass.Class;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("GameMode: %s"), *this->GetPathName());
+}
