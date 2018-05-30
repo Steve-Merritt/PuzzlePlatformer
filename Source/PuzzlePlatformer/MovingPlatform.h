@@ -25,8 +25,7 @@ public:
 	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
 	FVector TargetLocation;
 
-protected:
-	virtual void AMovingPlatform::Tick(float DeltaTime);
+	void Tick(float DeltaTime) override;
 
 private:
 	FVector m_globalTargetLocation;
