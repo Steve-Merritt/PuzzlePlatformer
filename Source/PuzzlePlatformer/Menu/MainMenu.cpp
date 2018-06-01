@@ -43,45 +43,6 @@ bool UMainMenu::Initialize()
 	return true;
 }
 
-void UMainMenu::SetMenuInterface(IMenuInterface* pMenuInterface)
-{
-	MenuInterface = pMenuInterface;
-}
-
-void UMainMenu::Setup()
-{
-	this->AddToViewport();
-
-	UWorld* pWorld = GetWorld();
-	if(!ensure(pWorld != nullptr)) return;
-	
-	APlayerController* playerController = pWorld->GetFirstPlayerController();
-	if(!ensure(playerController != nullptr)) return;
-
-	FInputModeUIOnly inputMode;
-	inputMode.SetWidgetToFocus(this->TakeWidget());
-	inputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-	playerController->SetInputMode(inputMode);
-
-	playerController->bShowMouseCursor = true;
-}
-
-void UMainMenu::Teardown()
-{
-	this->RemoveFromViewport();
-	
-	UWorld* pWorld = GetWorld();
-	if(!ensure(pWorld != nullptr)) return;
-
-	APlayerController* playerController = pWorld->GetFirstPlayerController();
-	if(!ensure(playerController != nullptr)) return;
-
-	FInputModeGameOnly inputMode;
-	playerController->SetInputMode(inputMode);
-
-	playerController->bShowMouseCursor = false;
-}
-
 void UMainMenu::OpenHostMenu()
 {
 	if(!ensure(HostMenu != nullptr)) return;

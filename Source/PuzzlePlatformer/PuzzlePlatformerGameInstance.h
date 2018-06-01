@@ -20,22 +20,27 @@ class PUZZLEPLATFORMER_API UPuzzlePlatformerGameInstance : public UGameInstance,
 public:
 	UPuzzlePlatformerGameInstance(const FObjectInitializer & ObjectInitializer);
 
-	virtual void Init();
+	void Init() override;
 	
 	UFUNCTION(BlueprintCallable)
 	void LoadMenuWidget();
+
+    UFUNCTION(BlueprintCallable)
+    void LoadInGameMenuWidget();
 
 	
 	// MenuInterface Impl
 
 	UFUNCTION(Exec)
-	void Host(const FString& ServerName);
+	void Host(const FString& ServerName) override;
 
 	UFUNCTION(Exec)
-	void Join(uint32 Index);
+	void Join(uint32 Index) override;
 
 	UFUNCTION(Exec)
-	void RefreshServerList();
+	void RefreshServerList() override;
+
+    void LoadMainMenu() override;
 
 protected:
 	/** Delegate for creating a new session */
@@ -101,6 +106,8 @@ private:
 	void CreateSession();
 
 	TSubclassOf<class UUserWidget> MenuClass;
+    TSubclassOf<class UUserWidget> InGameMenuClass;
+
 	class UMainMenu* MainMenu;
 
 	IOnlineSessionPtr SessionInterface;

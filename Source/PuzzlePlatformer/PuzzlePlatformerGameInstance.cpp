@@ -5,6 +5,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "Menu/MainMenu.h"
+#include "Menu/MenuWidget.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
 
@@ -20,6 +21,11 @@ UPuzzlePlatformerGameInstance::UPuzzlePlatformerGameInstance(const FObjectInitia
 	if(!ensure(MenuBPClass.Class != nullptr)) return;
 
 	MenuClass = MenuBPClass.Class;
+
+    ConstructorHelpers::FClassFinder<UUserWidget> InGameMenuBPClass(TEXT("/Game/Menu/WBP_InGameMenu"));
+    if (!ensure(InGameMenuBPClass.Class != nullptr)) return;
+
+    InGameMenuClass = InGameMenuBPClass.Class;
 
 	// Delegate handles
 	OnCreateSessionCompleteDelegate = FOnCreateSessionCompleteDelegate::CreateUObject(this, &UPuzzlePlatformerGameInstance::OnCreateSessionComplete);
@@ -62,11 +68,31 @@ void UPuzzlePlatformerGameInstance::LoadMenuWidget()
 {
 	if(!ensure(MenuClass != nullptr)) return;
 
-	MainMenu = CreateWidget<UMainMenu>(this, MenuClass);
+    MainMenu = CreateWidget<UMainMenu>(this, MenuClass);
 	if(!ensure(MainMenu != nullptr)) return;
 
-	MainMenu->Setup();
-	MainMenu->SetMenuInterface(this);
+    MainMenu->Setup();
+    MainMenu->SetMenuInterface(this);
+}
+
+void UPuzzlePlatformerGameInstance::LoadInGameMenuWidget()
+{
+    if (!ensure(InGameMenuClass != nullptr)) return;
+
+    auto InGameMenu = CreateWidget<UMenuWidget>(this, InGameMenuClass);
+    if (!ensure(InGameMenu != nullptr)) return;
+
+    UE_LOG(LogTemp, Warning, TEXT("load in game menu."));
+    InGameMenu->Setup();
+    InGameMenu->SetMenuInterface(this);
+}
+
+void UPuzzlePlatformerGameInstance::LoadMainMenu()
+{
+    APlayerController* PlayerController = GetFirstLocalPlayerController();
+    if (!ensure(PlayerController != nullptr)) return;
+
+    PlayerController->ClientTravel("/Game/Menu/MainMenu", ETravelType::TRAVEL_Absolute);
 }
 
 void UPuzzlePlatformerGameInstance::Host(const FString& ServerName)

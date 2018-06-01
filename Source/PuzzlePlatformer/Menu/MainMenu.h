@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "MenuInterface.h"
+#include "MenuWidget.h"
 #include "MainMenu.generated.h"
 
 USTRUCT()
@@ -23,7 +23,7 @@ struct FServerData
  * 
  */
 UCLASS()
-class PUZZLEPLATFORMER_API UMainMenu : public UUserWidget
+class PUZZLEPLATFORMER_API UMainMenu : public UMenuWidget
 {
 	GENERATED_BODY()
 
@@ -32,12 +32,7 @@ public:
 
 	void SetServerList(const TArray<FServerData> &ServerNames);
 
-	void SelectIndex(uint32 Index);
-
-	void SetMenuInterface(IMenuInterface* pMenuInterface);
-
-	void Setup();
-	void Teardown();
+	void SelectIndex(uint32 Index);	
 
 protected:
 	bool Initialize() override;
@@ -93,8 +88,6 @@ private:
 
 	UFUNCTION()
 	void OpenMainMenu();
-
-	IMenuInterface* MenuInterface;
 
 	TSubclassOf<class UUserWidget> ServerRowClass;
 
